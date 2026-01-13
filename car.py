@@ -1,50 +1,79 @@
-from gpiozero import Robot
+from gpiozero import Motor
 from time import sleep
 
-# הגדרת הפינים - שנה את המספרים אם חיברת לפינים אחרים ב-Pi
-# left=(IN1_PIN, IN2_PIN), right=(IN3_PIN, IN4_PIN)
-robby = Robot(left=(17, 27), right=(22, 23))
+# --- הגדרת 4 המנועים לפי החיבורים שלך ---
 
-print("Control the car with the keyboard:")
-print("w: Forward")
-print("s: Backward")
-print("a: Left (Spin)")
-print("d: Right (Spin)")
-print("q: Stop")
+# צד שמאל (Left)
+# קדמי: 17, 27 | אחורי: 5, 6
+front_left = Motor(forward=17, backward=27)
+rear_left = Motor(forward=5, backward=6)
+
+# צד ימין (Right)
+# קדמי: 22, 23 | אחורי: 13, 19
+front_right = Motor(forward=22, backward=23)
+rear_right = Motor(forward=13, backward=19)
+
+print("Control the 4WD car with the keyboard:")
+print("w: Forward (כל הגלגלים קדימה)")
+print("s: Backward (כל הגלגלים אחורה)")
+print("a: Left (סיבוב במקום שמאלה)")
+print("d: Right (סיבוב במקום ימינה)")
+print("q: Stop (עצירה)")
 print("e: Exit program")
 
 # הגדרת מהירות (בין 0 ל-1)
-speed = 1
+speed = 0.3
+
+def stop_all():
+    front_left.stop()
+    rear_left.stop()
+    front_right.stop()
+    rear_right.stop()
 
 try:
     while True:
-        # שימוש ב-input (מתאים לפייתון 3)
+        # קבלת פקודה מהמשתמש
         command = input("Enter command: ").lower()
 
         if command == 'w':
             print("Going Forward")
-            robby.forward(speed)
+            # הפעלת צד שמאל וצד ימין קדימה
+            front_left.forward(speed)
+            rear_left.forward(speed)
+            front_right.forward(speed)
+            rear_right.forward(speed)
         
         elif command == 's':
             print("Going Backward")
-            robby.backward(speed)
+            # הפעלת צד שמאל וצד ימין אחורה
+            front_left.backward(speed)
+            rear_left.backward(speed)
+            front_right.backward(speed)
+            rear_right.backward(speed)
         
         elif command == 'a':
             print("Turning Left")
-            # סיבוב במקום: גלגל אחד קדימה, שני אחורה
-            robby.left(speed)
+            # סיבוב טנק: שמאל אחורה, ימין קדימה
+            front_left.backward(speed)
+            rear_left.backward(speed)
+            front_right.forward(speed)
+            rear_right.forward(speed)
         
         elif command == 'd':
             print("Turning Right")
-            robby.right(speed)
+            # סיבוב טנק: שמאל קדימה, ימין אחורה
+            front_left.forward(speed)
+            rear_left.forward(speed)
+            front_right.backward(speed)
+            rear_right.backward(speed)
         
         elif command == 'q':
             print("Stopping")
-            robby.stop()
+            stop_all()
 
         elif command == 'e':
             print("Exiting...")
-            robby.stop()
+            stop_all()
             break
             
         else:
@@ -52,4 +81,4 @@ try:
 
 except KeyboardInterrupt:
     print("\nProgram stopped by user")
-    robby.stop()
+    stop_all()
