@@ -5,13 +5,15 @@ from time import sleep
 
 # צד שמאל (Left)
 # קדמי: 17, 27 | אחורי: 5, 6
-front_left = Motor(forward=17, backward=27)
-rear_left = Motor(forward=5, backward=6)
+# תיקון כיוון: החלפת forward/backward בגלל בעיית חומרה
+front_left = Motor(forward=27, backward=17)
+rear_left = Motor(forward=6, backward=5)
 
 # צד ימין (Right)
 # קדמי: 22, 23 | אחורי: 13, 19
-front_right = Motor(forward=22, backward=23)
-rear_right = Motor(forward=13, backward=19)
+# תיקון כיוון: החלפת forward/backward בגלל בעיית חומרה
+front_right = Motor(forward=23, backward=22)
+rear_right = Motor(forward=19, backward=13)
 
 print("Control the 4WD car with the keyboard:")
 print("w: Forward (כל הגלגלים קדימה)")
