@@ -40,9 +40,9 @@ try:
         if command == 'w':
             print("Going Forward")
             # הפעלת צד שמאל וצד ימין קדימה
-            front_left.forward(speed)
+            front_left.backward(speed)
             rear_left.forward(speed)
-            front_right.forward(speed)
+            front_right.backward(speed)
             rear_right.forward(speed)
         
         elif command == 's':
