@@ -1,73 +1,103 @@
 from gpiozero import Motor
 from time import sleep
 
-# --- הגדרת 4 המנועים לפי החיבורים שלך ---
 
-# צד שמאל (Left)
-# קדמי: 17, 27 | אחורי: 5, 6
-# תיקון כיוון: החלפת forward/backward בגלל בעיית חומרה
-front_left = Motor(forward=27, backward=17)
-rear_left = Motor(forward=6, backward=5)
 
-# צד ימין (Right)
-# קדמי: 22, 23 | אחורי: 13, 19
-# תיקון כיוון: החלפת forward/backward בגלל בעיית חומרה
-front_right = Motor(forward=23, backward=22)
-rear_right = Motor(forward=19, backward=13)
 
-print("Control the 4WD car with the keyboard:")
-print("w: Forward (כל הגלגלים קדימה)")
-print("s: Backward (כל הגלגלים אחורה)")
-print("a: Left (סיבוב במקום שמאלה)")
-print("d: Right (סיבוב במקום ימינה)")
-print("q: Stop (עצירה)")
+frontRightWheel = Motor(forward=27, backward=17)
+backLeftWheel = Motor(forward=6, backward=5)
+
+
+frontLeftWheel = Motor(forward=23, backward=22)
+backRightWheel = Motor(forward=19, backward=13)
+
+def frontRightWheelBackward():
+    frontRightWheel.backward(speed)
+
+def frontRightWheelForward():
+    frontRightWheel.forward(speed)
+
+def frontLeftWheelForward():
+    frontLeftWheel.backward(speed)
+
+def frontLeftWheelBackward():
+    frontLeftWheel.forward(speed)
+
+def backLeftWheelFoward():
+    backLeftWheel.backward(speed)    
+
+def backLeftWheelBackward():
+    backLeftWheel.forward(speed)
+
+def backRightWheelFoward():
+    backRightWheel.forward(speed)   
+
+def backRightWheelBackward():
+    backRightWheel.backward(speed)   
+
+    
+
+
+
+print("w: Forward")
+print("s: Backward ")
+print("a: Left ")
+print("d: Right ")
+print("q: Stop ")
 print("e: Exit program")
 
-# הגדרת מהירות (בין 0 ל-1)
-speed = 0.3
+
+MIN_MOMENTOM_FOR_SPEED = 0.5
+normalSpeed = 1 # MIN_MOMENTOM_FOR_SPEED + 0.3 
+speed = normalSpeed 
+speedForTurning = 1 #MIN_MOMENTOM_FOR_SPEED + 0.5
 
 def stop_all():
-    front_left.stop()
-    rear_left.stop()
-    front_right.stop()
-    rear_right.stop()
+    frontRightWheel.stop()
+    backLeftWheel.stop()
+    frontLeftWheel.stop()
+    backRightWheel.stop()
 
 try:
     while True:
-        # קבלת פקודה מהמשתמש
+
         command = input("Enter command: ").lower()
 
         if command == 'w':
+            speed = normalSpeed
             print("Going Forward")
-            # הפעלת צד שמאל וצד ימין קדימה
-            front_left.backward(speed)
-            rear_left.forward(speed)
-            front_right.backward(speed)
-            rear_right.forward(speed)
+            frontRightWheelForward()
+            frontLeftWheelForward()
+            backLeftWheelFoward()
+            backRightWheelFoward()
         
         elif command == 's':
+            speed = normalSpeed
             print("Going Backward")
-            # הפעלת צד שמאל וצד ימין אחורה
-            front_left.backward(speed)
-            rear_left.backward(speed)
-            front_right.backward(speed)
-            rear_right.backward(speed)
+            frontRightWheelBackward()
+            frontLeftWheelBackward()
+            backLeftWheelBackward()
+            backRightWheelBackward()
+
+
         
         elif command == 'a':
             print("Turning Left")
-            # סיבוב טנק: שמאל אחורה, ימין קדימה
-            front_left.backward(speed)
-            rear_left.backward(speed)
-            front_right.forward(speed)
-            rear_right.forward(speed)
+            speed = speedForTurning
+            frontRightWheelForward()
+            backRightWheelFoward()
+            frontLeftWheelBackward()
+            backLeftWheelBackward()
         
         elif command == 'd':
             print("Turning Right")
-            # סיבוב טנק: שמאל קדימה, ימין אחורה
-            front_left.forward(speed)
-            rear_left.forward(speed)
-            front_right.backward(speed)
-            rear_right.backward(speed)
+            speed = speedForTurning
+            frontLeftWheelForward()
+            backLeftWheelFoward()
+            frontRightWheelBackward()
+            backRightWheelBackward()
+
+            
         
         elif command == 'q':
             print("Stopping")
