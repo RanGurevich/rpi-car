@@ -1,25 +1,19 @@
 from gpiozero import Motor
 from time import sleep
 
-# --- הגדרת המנועים ---
 frontRightWheel = Motor(forward=27, backward=17)
 backLeftWheel = Motor(forward=6, backward=5)
 frontLeftWheel = Motor(forward=23, backward=22)
 backRightWheel = Motor(forward=19, backward=13)
 
-# הגדרות מהירות
 MIN_MOMENTOM_FOR_SPEED = 0.5
 normalSpeed = 0.7
 speed = normalSpeed 
 speedForTurning = 1 
 speedForStrafing = 1 
 
-# --- כיול הזמן לסיבוב ---
-# שנה את המספר הזה עד שהרובוט יסתובב בדיוק 45 מעלות
-# מספר גדול יותר = סיבוב גדול יותר
 TURN_TIME_22_DEG = 0.2 
 
-# --- פונקציות עוטפות (התיקון שלך נשמר) ---
 def frontRightWheelBackward():
     frontRightWheel.backward(speed)
 
@@ -27,16 +21,16 @@ def frontRightWheelForward():
     frontRightWheel.forward(speed)
 
 def frontLeftWheelForward():
-    frontLeftWheel.backward(speed) # תיקון הלחמה
+    frontLeftWheel.backward(speed)
 
 def frontLeftWheelBackward():
-    frontLeftWheel.forward(speed) # תיקון הלחמה
+    frontLeftWheel.forward(speed)
 
 def backLeftWheelFoward():
-    backLeftWheel.backward(speed) # תיקון הלחמה
+    backLeftWheel.backward(speed)
 
 def backLeftWheelBackward():
-    backLeftWheel.forward(speed) # תיקון הלחמה
+    backLeftWheel.forward(speed)
 
 def backRightWheelFoward():
     backRightWheel.forward(speed)    
@@ -50,7 +44,6 @@ def stop_all():
     frontLeftWheel.stop()
     backRightWheel.stop()
 
-# --- תפריט ---
 print("--- Mecanum Control (Discrete Turning) ---")
 print("w: Forward | s: Backward")
 print("a: Turn Left 45° | d: Turn Right 45°")
@@ -62,7 +55,6 @@ try:
     while True:
         command = input("Enter command: ").lower()
 
-        # === נסיעה רגילה ===
         if command == 'w':
             speed = normalSpeed
             print("Going Forward")
@@ -79,41 +71,32 @@ try:
             backLeftWheelBackward()
             backRightWheelBackward()
 
-        # === סיבוב במקום 45 מעלות ===
-        # כאן השינוי הגדול: אנחנו מפעילים, מחכים ועוצרים
         elif command == 'a':
             print(f"Turning Left 45 degrees ({TURN_TIME_22_DEG}s)...")
             speed = speedForTurning
             
-            # התחלת סיבוב
             frontRightWheelForward()
             backRightWheelFoward()
             frontLeftWheelBackward()
             backLeftWheelBackward()
             
-            # המתנה לזמן המוגדר
             sleep(TURN_TIME_22_DEG)
             
-            # עצירה אוטומטית
             stop_all()
         
         elif command == 'd':
-            print(f"Turning Right 45 degrees ({TURN_TIME_22_DEG}s)...")
+            print(f"Turning Right 22 degrees ({TURN_TIME_22_DEG}s)...")
             speed = speedForTurning
             
-            # התחלת סיבוב
             frontLeftWheelForward()
             backLeftWheelFoward()
             frontRightWheelBackward()
             backRightWheelBackward()
             
-            # המתנה לזמן המוגדר
             sleep(TURN_TIME_22_DEG)
             
-            # עצירה אוטומטית
             stop_all()
 
-        # === גלישה הצידה (Strafing) ===
         elif command == 'z':
             print("Strafe Left")
             speed = speedForStrafing
@@ -130,7 +113,6 @@ try:
             backLeftWheelBackward()
             backRightWheelFoward()
 
-        # === אלכסונים ===
         elif command == 'u':
             print("Diagonal: Forward-Left")
             speed = normalSpeed
@@ -163,7 +145,6 @@ try:
             frontLeftWheel.stop()
             backRightWheel.stop()
 
-        # === יציאה ===
         elif command == 'q':
             print("Stopping")
             stop_all()
