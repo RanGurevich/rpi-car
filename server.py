@@ -3,6 +3,9 @@ import websockets
 from camera import broadcast_frames
 from carControls import execute_command
 
+from gpiozero import DistanceSensor
+from time import sleep
+
 PORT = 80
 
 all_clients = set()
@@ -32,8 +35,24 @@ async def main():
         print("Clients can receive camera feed and send car control commands")
         await broadcast_frames(all_clients)
 
+    trigPin = 24
+    # ultra sonic sensor
+    echoPin = 21
+    sensor = DistanceSensor(echo=echoPin, trigger=trigPin ,max_distance=3)
+    printUltraSonicData()
+
+
+
+            # end of ultra sonic sensor
+
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
         print("Stopped by user")
+
+
+    def printUltraSonicData():
+        while True:
+            print('Distance: ', sensor.distance * 100,'cm')
+            sleep(1)
