@@ -52,7 +52,7 @@ async def driveForward():
     backLeftWheelFoward(speed)
     backRightWheelFoward(speed)
     await asyncio.sleep(FORWARD_BACKWARD_TIME)
-    stop_all()
+    await stop_all()
 
 async def driveBackward():
     speed = normalSpeed
@@ -61,7 +61,7 @@ async def driveBackward():
     backLeftWheelBackward(speed)
     backRightWheelBackward(speed)
     await asyncio.sleep(FORWARD_BACKWARD_TIME)
-    stop_all()
+    await stop_all()
 
 async def turnLeft():
     speed = speedForTurning
@@ -70,7 +70,7 @@ async def turnLeft():
     frontLeftWheelBackward(speed)
     backLeftWheelBackward(speed)
     await asyncio.sleep(TURN_TIME_22_DEG)
-    stop_all()
+    await stop_all()
 
 async def turnRight():
     speed = speedForTurning
@@ -79,7 +79,7 @@ async def turnRight():
     frontRightWheelBackward(speed)
     backRightWheelBackward(speed)
     await asyncio.sleep(TURN_TIME_22_DEG)
-    stop_all()
+    await stop_all()
 
 
 async def execute_command(command):
@@ -104,6 +104,8 @@ async def execute_command(command):
         frontRightWheelForward(speed)
         backLeftWheelFoward(speed)
         backRightWheelBackward(speed)
+        await asyncio.sleep(1.0)
+        await stop_all()
 
     elif command == 'c':
         print("Strafe Right")
@@ -112,6 +114,8 @@ async def execute_command(command):
         frontRightWheelBackward(speed)
         backLeftWheelBackward(speed)
         backRightWheelFoward(speed)
+        await asyncio.sleep(1.0)
+        await stop_all()
 
     elif command == 'u':
         print("Diagonal: Forward-Left")
@@ -120,6 +124,8 @@ async def execute_command(command):
         backLeftWheelFoward(speed)
         frontLeftWheel.stop()
         backRightWheel.stop()
+        await asyncio.sleep(1.0)
+        await stop_all()
 
     elif command == 'i':
         print("Diagonal: Forward-Right")
@@ -128,6 +134,8 @@ async def execute_command(command):
         backRightWheelFoward(speed)
         frontRightWheel.stop()
         backLeftWheel.stop()
+        await asyncio.sleep(1.0)
+        await stop_all()
 
     elif command == 'j':
         print("Diagonal: Backward-Left")
@@ -136,6 +144,8 @@ async def execute_command(command):
         backRightWheelBackward(speed)
         frontRightWheel.stop()
         backLeftWheel.stop()
+        await asyncio.sleep(1.0)
+        await stop_all()
 
     elif command == 'k':
         print("Diagonal: Backward-Right")
@@ -144,6 +154,8 @@ async def execute_command(command):
         backLeftWheelBackward(speed)
         frontLeftWheel.stop()
         backRightWheel.stop()
+        await asyncio.sleep(1.0)
+        await stop_all()
 
     elif command == 'stop':
         await stop_all()
