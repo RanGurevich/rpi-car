@@ -8,7 +8,7 @@ frontLeftWheel = Motor(forward=23, backward=22)
 backRightWheel = Motor(forward=19, backward=13)
 
 MIN_MOMENTOM_FOR_SPEED = 0.5
-normalSpeed = 1
+normalSpeed = 0.7
 speedForTurning = 1 
 speedForStrafing = 1 
 
@@ -39,54 +39,63 @@ def backRightWheelFoward(speed_val):
 def backRightWheelBackward(speed_val):
     backRightWheel.backward(speed_val)    
 
-def stop_all():
+async def stop_all():
     frontRightWheel.stop()
     backLeftWheel.stop()
     frontLeftWheel.stop()
     backRightWheel.stop()
 
+async def driveForward():
+    speed = normalSpeed
+    frontRightWheelForward(speed)
+    frontLeftWheelForward(speed)
+    backLeftWheelFoward(speed)
+    backRightWheelFoward(speed)
+    await asyncio.sleep(FORWARD_BACKWARD_TIME)
+    stop_all()
+
+async def driveBackward():
+    speed = normalSpeed
+    frontRightWheelBackward(speed)
+    frontLeftWheelBackward(speed)
+    backLeftWheelBackward(speed)
+    backRightWheelBackward(speed)
+    await asyncio.sleep(FORWARD_BACKWARD_TIME)
+    stop_all()
+
+async def turnLeft():
+    speed = speedForTurning
+    frontRightWheelForward(speed)
+    backRightWheelFoward(speed)
+    frontLeftWheelBackward(speed)
+    backLeftWheelBackward(speed)
+    await asyncio.sleep(TURN_TIME_22_DEG)
+    stop_all()
+
+async def turnRight():
+    speed = speedForTurning
+    frontLeftWheelForward(speed)
+    backLeftWheelFoward(speed)
+    frontRightWheelBackward(speed)
+    backRightWheelBackward(speed)
+    await asyncio.sleep(TURN_TIME_22_DEG)
+    stop_all()
+
+
 async def execute_command(command):
     command = command.lower().strip()
     
     if command == 'forward':
-        print("Going Forward")
-        speed = normalSpeed
-        frontRightWheelForward(speed)
-        frontLeftWheelForward(speed)
-        backLeftWheelFoward(speed)
-        backRightWheelFoward(speed)
-        await asyncio.sleep(FORWARD_BACKWARD_TIME)
-        stop_all()
+        await driveForward()
         
     elif command == 'backward':
-        print("Going Backward")
-        speed = normalSpeed
-        frontRightWheelBackward(speed)
-        frontLeftWheelBackward(speed)
-        backLeftWheelBackward(speed)
-        backRightWheelBackward(speed)
-        await asyncio.sleep(FORWARD_BACKWARD_TIME)
-        stop_all()
+        await driveBackward()
 
     elif command == 'left':
-        print(f"Turning Left 45 degrees ({TURN_TIME_22_DEG}s)...")
-        speed = speedForTurning
-        frontRightWheelForward(speed)
-        backRightWheelFoward(speed)
-        frontLeftWheelBackward(speed)
-        backLeftWheelBackward(speed)
-        await asyncio.sleep(TURN_TIME_22_DEG)
-        stop_all()
+        await turnLeft()
         
     elif command == 'right':
-        print(f"Turning Right 22 degrees ({TURN_TIME_22_DEG}s)...")
-        speed = speedForTurning
-        frontLeftWheelForward(speed)
-        backLeftWheelFoward(speed)
-        frontRightWheelBackward(speed)
-        backRightWheelBackward(speed)
-        await asyncio.sleep(TURN_TIME_22_DEG)
-        stop_all()
+        await turnRight()
 
     elif command == 'z':
         print("Strafe Left")
@@ -137,8 +146,8 @@ async def execute_command(command):
         backRightWheel.stop()
 
     elif command == 'stop':
-        print("Stopping")
-        stop_all()
+        await stop_all()
+
 
     else:
         print(f"Unknown command: {command}")
