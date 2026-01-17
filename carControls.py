@@ -85,11 +85,11 @@ async def turnRight():
 async def driveAlone():
     while True:
         if(getDistance() > 10):
-            driveForward()
+            await driveForward()
         else:
-            turnLeft()
-            turnLeft()
-            driveBackward()
+            await turnLeft()
+            await turnLeft()
+            await driveBackward()
 
 
 
