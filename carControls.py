@@ -8,7 +8,7 @@ frontLeftWheel = Motor(forward=23, backward=22)
 backRightWheel = Motor(forward=19, backward=13)
 
 MIN_MOMENTOM_FOR_SPEED = 0.5
-normalSpeed = 0.7
+normalSpeed = 1
 speedForTurning = 1 
 speedForStrafing = 1 
 
