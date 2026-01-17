@@ -84,7 +84,7 @@ async def turnRight():
 
 async def driveAlone():
     while True:
-        if(getDistance() > 10):
+        if(getDistance() > 20):
             await driveForward()
         else:
             await turnLeft()
