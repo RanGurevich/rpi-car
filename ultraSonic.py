@@ -1,8 +1,10 @@
 from gpiozero import DistanceSensor
-
+import time
 trigPin = 24
 echoPin = 21
 sensor = DistanceSensor(echo=echoPin, trigger=trigPin, max_distance=3)
+
+carDistance = 0
 
 def get_distance():
     try:
@@ -13,7 +15,9 @@ def get_distance():
         return None
 
 def print_distance():
+    time.sleep(0.1)
     distance = get_distance()
     if distance is not None:
+        carDistance = distance
         print(f'Distance: {distance:.2f} cm')
     return distance

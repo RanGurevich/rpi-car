@@ -3,7 +3,7 @@ import asyncio
 import base64
 from picamera2 import Picamera2
 from ultralytics import YOLO
-from ultrasonic_sensor import print_distance
+from ultraSonic import print_distance
 
 model = YOLO('yolov8n.pt') 
 
