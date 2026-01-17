@@ -10,11 +10,11 @@ backRightWheel = Motor(forward=19, backward=13)
 
 MIN_MOMENTOM_FOR_SPEED = 0.5
 normalSpeed = 0.7
-speedForTurning = 0.3
+speedForTurning = 1
 speedForStrafing = 0.3
 
-TURN_TIME_22_DEG = 0.2 
-FORWARD_BACKWARD_TIME = 1.0
+TURN_TIME_22_DEG = 0.5 
+FORWARD_BACKWARD_TIME = 0.2
 
 def frontRightWheelBackward(speed_val):
     frontRightWheel.backward(speed_val)
