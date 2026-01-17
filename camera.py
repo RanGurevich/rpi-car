@@ -14,6 +14,10 @@ picam2.configure(config)
 picam2.start()
 
 def printUltraSonicData():
+    trigPin = 24
+    # ultra sonic sensor
+    echoPin = 21
+    sensor = DistanceSensor(echo=echoPin, trigger=trigPin ,max_distance=3)
     while True:
         print('Distance: ', sensor.distance * 100,'cm')
         sleep(1)
@@ -55,10 +59,6 @@ async def broadcast_frames(connected_clients):
                 tasks = [client.send(jpg_as_text) for client in connected_clients]
                 await asyncio.gather(*tasks, return_exceptions=True)
 
-                trigPin = 24
-                # ultra sonic sensor
-                echoPin = 21
-                sensor = DistanceSensor(echo=echoPin, trigger=trigPin ,max_distance=3)
                 printUltraSonicData()
             
             await asyncio.sleep(0.001)
