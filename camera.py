@@ -3,8 +3,7 @@ import asyncio
 import base64
 from picamera2 import Picamera2
 from ultralytics import YOLO
-from gpiozero import DistanceSensor
-from time import sleep
+from ultrasonic_sensor import print_distance
 
 model = YOLO('yolov8n.pt') 
 
@@ -12,15 +11,6 @@ picam2 = Picamera2()
 config = picam2.create_preview_configuration(main={"size": (1292, 972), "format": "RGB888"})
 picam2.configure(config)
 picam2.start()
-
-def printUltraSonicData():
-    trigPin = 24
-    # ultra sonic sensor
-    echoPin = 21
-    sensor = DistanceSensor(echo=echoPin, trigger=trigPin ,max_distance=3)
-    while True:
-        print('Distance: ', sensor.distance * 100,'cm')
-        sleep(1)
 
 
 async def broadcast_frames(connected_clients):
@@ -59,7 +49,9 @@ async def broadcast_frames(connected_clients):
                 tasks = [client.send(jpg_as_text) for client in connected_clients]
                 await asyncio.gather(*tasks, return_exceptions=True)
 
-                printUltraSonicData()
+            distance = print_distance()
+            if distance < 10:
+                print("Too close")
             
             await asyncio.sleep(0.001)
 
