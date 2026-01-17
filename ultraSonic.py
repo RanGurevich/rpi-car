@@ -6,7 +6,7 @@ sensor = DistanceSensor(echo=echoPin, trigger=trigPin, max_distance=3)
 
 carDistance = 0
 
-def get_distance():
+def getDistance():
     try:
         distance_cm = sensor.distance * 100
         return distance_cm
@@ -16,7 +16,7 @@ def get_distance():
 
 def print_distance():
     time.sleep(0.1)
-    distance = get_distance()
+    distance = getDistance()
     if distance is not None:
         carDistance = distance
         print(f'Distance: {distance:.2f} cm')
