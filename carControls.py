@@ -1,5 +1,6 @@
 from gpiozero import Motor
 from time import sleep
+from ultraSonic import getDistance
 import asyncio
 
 frontRightWheel = Motor(forward=27, backward=17)
@@ -81,6 +82,16 @@ async def turnRight():
     await asyncio.sleep(TURN_TIME_22_DEG)
     await stop_all()
 
+async def driveAlone():
+    while True:
+        if(getDistance() > 10):
+            driveForward()
+        else:
+            turnLeft()
+            turnLeft()
+            driveBackward()
+
+
 
 async def execute_command(command):
     command = command.lower().strip()
@@ -89,7 +100,8 @@ async def execute_command(command):
         await driveForward()
         
     elif command == 'backward':
-        await driveBackward()
+        #await driveBackward()
+        await driveAlone()
 
     elif command == 'left':
         await turnLeft()
