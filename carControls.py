@@ -9,8 +9,8 @@ backRightWheel = Motor(forward=19, backward=13)
 
 MIN_MOMENTOM_FOR_SPEED = 0.5
 normalSpeed = 0.7
-speedForTurning = 1 
-speedForStrafing = 1 
+speedForTurning = 0.3
+speedForStrafing = 0.3
 
 TURN_TIME_22_DEG = 0.2 
 FORWARD_BACKWARD_TIME = 1.0
