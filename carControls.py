@@ -90,8 +90,8 @@ async def driveAlone():
         if(getDistance() > 20):
             await driveForward(0.5)
             newDistance = getDistance()
-            if(int.parseInt(newDistance) == int.parseInt(oldDistance)):
-                driveBackward(0.5)
+            if(int(newDistance) == int(oldDistance)):
+                await driveBackward(0.5)
         else:
             await turnLeft(0.3)
             await turnLeft(0.3)
