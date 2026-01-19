@@ -3,6 +3,10 @@ objectFound = []
 def updateObjectFound(items):
     global objectFound
     itemsNameFound = []
+    
+    if items is None or not hasattr(items, 'boxes') or len(items.boxes) == 0:
+        objectFound = []
+        return
    
     for box in items.boxes:
         class_id = int(box.cls[0])  

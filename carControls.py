@@ -98,8 +98,6 @@ async def searchItem(itemName):
             await turnLeft(0.6)
             await driveBackward(0.5)
 
-        
-        ()
         itemFound = getFoundObjects()
         print(f"!!!!!!!!!!!!!!!Found objects: {itemFound}")
         if(itemName in itemFound):
