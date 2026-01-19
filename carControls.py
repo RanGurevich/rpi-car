@@ -88,7 +88,9 @@ async def turnRight(timeToDrive):
     await stopCar()
 
 async def searchItem(itemName):
+    turnOffAllLeds()
     while True:
+        turnOnRedLed()
         oldDistance = getDistance()
         await asyncio.sleep(0.1)
         if(getDistance() > 20):
@@ -104,9 +106,13 @@ async def searchItem(itemName):
         itemFound = getFoundObjects()
         print(f"!!!!!!!!!!!!!!!Found objects: {itemFound}")
         if(itemName in itemFound):
+            turnOffRedLed()
+            turnOnGreenLed()
             await stopCar()
             # item found but not entering to the condition
             print(f"Foundxx {itemName}")
+            await asyncio.sleep(60)
+            turnOffAllLeds()
             await stopCar()
             break
         
@@ -123,9 +129,9 @@ async def runDriveCommand(command):
         
     elif command == 'backward':
         #await driveBackward()
-        #await searchItem('banana')
-        turnOnRedLed()
-        turnOnGreenLed()
+        await searchItem('banana')
+        #turnOnRedLed()
+        #turnOnGreenLed()
 
     elif command == 'left':
         await turnLeft(0.3)
