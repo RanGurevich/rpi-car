@@ -192,5 +192,6 @@ async def runDriveCommand(command):
         await stopCar()
 
     else:
-        await searchItem(command)
+        print(command)
+        #await searchItem(command)
 
