@@ -85,8 +85,13 @@ async def turnRight(timeToDrive):
 
 async def driveAlone():
     while True:
+        oldDistance = getDistance()
+        await asyncio.sleep(0.1)
         if(getDistance() > 20):
             await driveForward(0.5)
+            newDistance = getDistance()
+            if(int.parseInt(newDistance) == int.parseInt(oldDistance)):
+                driveBackward(0.5)
         else:
             await turnLeft(0.3)
             await turnLeft(0.3)
