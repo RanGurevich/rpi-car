@@ -102,7 +102,7 @@ async def execute_command(command):
         
     elif command == 'backward':
         #await driveBackward()
-        await driveAlone(0.5)
+        await driveAlone()
 
     elif command == 'left':
         await turnLeft(0.3)
