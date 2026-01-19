@@ -43,10 +43,10 @@ def backRightWheelBackward(speed_val):
     backRightWheel.backward(speed_val)    
 
 async def stopCar():
-    await frontRightWheel.stop()
-    await backLeftWheel.stop()
-    await frontLeftWheel.stop()
-    await backRightWheel.stop()
+    frontRightWheel.stop()
+    backLeftWheel.stop()
+    frontLeftWheel.stop()
+    backRightWheel.stop()
 
 async def driveForward(timeToDrive):
     speed = normalSpeed
