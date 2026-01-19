@@ -14,9 +14,7 @@ normalSpeed = 0.5
 speedForTurning = 0.8
 speedForStrafing = 0.3
 
-TURN_TIME_22_DEG = 0.5 
-FORWARD_BACKWARD_TIME = 0.2
-TIME_FOR_USER_DRIVE = 0.5
+mission_finished = False 
 
 def frontRightWheelBackward(speed_val):
     frontRightWheel.backward(speed_val)
@@ -42,52 +40,69 @@ def backRightWheelFoward(speed_val):
 def backRightWheelBackward(speed_val):
     backRightWheel.backward(speed_val)    
 
-async def stopCar():
-    frontRightWheel.stop()
-    backLeftWheel.stop()
-    frontLeftWheel.stop()
-    backRightWheel.stop()
+async def stopCarFunc():
+    await frontRightWheel.stop()
+    await backLeftWheel.stop()
+    await frontLeftWheel.stop()
+    await backRightWheel.stop()
 
 async def driveForward(timeToDrive):
+    if mission_finished:
+        return
     speed = normalSpeed
     frontRightWheelForward(speed)
     frontLeftWheelForward(speed)
     backLeftWheelFoward(speed)
     backRightWheelFoward(speed)
     await asyncio.sleep(timeToDrive)
-    await stopCar()
+    await stopCarFunc()
 
 async def driveBackward(timeToDrive):
+    if mission_finished:
+        return
     speed = normalSpeed
     frontRightWheelBackward(speed)
     frontLeftWheelBackward(speed)
     backLeftWheelBackward(speed)
     backRightWheelBackward(speed)
     await asyncio.sleep(timeToDrive)
-    await stopCar()
+    await stopCarFunc()
 
 async def turnLeft(timeToDrive):
+    if mission_finished:
+        return
     speed = speedForTurning
     frontRightWheelForward(speed)
     backRightWheelFoward(speed)
     frontLeftWheelBackward(speed)
     backLeftWheelBackward(speed)
     await asyncio.sleep(timeToDrive)
-    await stopCar()
+    await stopCarFunc()
 
 async def turnRight(timeToDrive):
+    if mission_finished:
+        return
     speed = speedForTurning
     frontLeftWheelForward(speed)
     backLeftWheelFoward(speed)
     frontRightWheelBackward(speed)
     backRightWheelBackward(speed)
     await asyncio.sleep(timeToDrive)
-    await stopCar()
+    await stopCarFunc()
 
 async def searchItem(itemName):
+    global mission_finished
+    
+    if mission_finished:
+        return
+
     while True:
+        if mission_finished:
+            break
+
         oldDistance = getDistance()
         await asyncio.sleep(0.1)
+        
         if(getDistance() > 20):
             await driveForward(0.5)
             newDistance = getDistance()
@@ -99,28 +114,28 @@ async def searchItem(itemName):
             await driveBackward(0.5)
 
         itemFound = getFoundObjects()
-        print(f"!!!!!!!!!!!!!!!Found objects: {itemFound}")
-        print(itemName)
-        if(itemName in itemFound):
-            await stopCar()
-            # item found but not entering to the condition
-            print(f"Foundxx {itemName}")
-            await stopCar()
-            return
         
-
-
-
-
+        if itemName in itemFound:
+            mission_finished = True 
+            await stopCarFunc()
+            return
 
 async def runDriveCommand(command):
+    global mission_finished
+    
+    if mission_finished:
+        return
+
     command = command.lower().strip()
     
+    if command == 'reset_mission':
+        mission_finished = False
+        return
+
     if command == 'forward':
         await driveForward(0.5)
         
     elif command == 'backward':
-        #await driveBackward()
         await searchItem('banana')
 
     elif command == 'left':
@@ -130,68 +145,61 @@ async def runDriveCommand(command):
         await turnRight(0.3)
 
     elif command == 'z':
-        print("Strafe Left")
         speed = speedForStrafing
         frontLeftWheelBackward(speed)
         frontRightWheelForward(speed)
         backLeftWheelFoward(speed)
         backRightWheelBackward(speed)
         await asyncio.sleep(1.0)
-        await stopCar()
+        await stopCarFunc()
 
     elif command == 'c':
-        print("Strafe Right")
         speed = speedForStrafing
         frontLeftWheelForward(speed)
         frontRightWheelBackward(speed)
         backLeftWheelBackward(speed)
         backRightWheelFoward(speed)
         await asyncio.sleep(1.0)
-        await stopCar()
+        await stopCarFunc()
 
     elif command == 'u':
-        print("Diagonal: Forward-Left")
         speed = normalSpeed
         frontRightWheelForward(speed)
         backLeftWheelFoward(speed)
         frontLeftWheel.stop()
         backRightWheel.stop()
         await asyncio.sleep(1.0)
-        await stopCar()
+        await stopCarFunc()
 
     elif command == 'i':
-        print("Diagonal: Forward-Right")
         speed = normalSpeed
         frontLeftWheelForward(speed)
         backRightWheelFoward(speed)
         frontRightWheel.stop()
         backLeftWheel.stop()
         await asyncio.sleep(1.0)
-        await stopCar()
+        await stopCarFunc()
 
-    elif command == 'j':
-        print("Diagonal: Backward-Left")
+    elif command == 'j':    
         speed = normalSpeed
         frontLeftWheelBackward(speed)
         backRightWheelBackward(speed)
         frontRightWheel.stop()
         backLeftWheel.stop()
         await asyncio.sleep(1.0)
-        await stopCar()
+        await stopCarFunc()
 
-    elif command == 'k':
-        print("Diagonal: Backward-Right")
+    elif command == 'k':    
         speed = normalSpeed
         frontRightWheelBackward(speed)
         backLeftWheelBackward(speed)
         frontLeftWheel.stop()
         backRightWheel.stop()
         await asyncio.sleep(1.0)
-        await stopCar()
+        await stopCarFunc()
 
     elif command == 'stop':
-        await stopCar()
+        await stopCarFunc()
 
     else:
         await searchItem(command)
-
