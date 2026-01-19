@@ -100,13 +100,12 @@ async def searchItem(itemName):
 
         itemFound = getFoundObjects()
         print(f"!!!!!!!!!!!!!!!Found objects: {itemFound}")
-        print(itemName)
         if(itemName in itemFound):
             await stopCar()
             # item found but not entering to the condition
             print(f"Foundxx {itemName}")
             await stopCar()
-            return
+            break
         
 
 
