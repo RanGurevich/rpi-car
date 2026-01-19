@@ -2,6 +2,7 @@ from gpiozero import Motor
 from time import sleep
 from ultraSonic import getDistance
 import asyncio
+from findObjects import getObjectFound
 
 frontRightWheel = Motor(forward=27, backward=17)
 backLeftWheel = Motor(forward=6, backward=5)
@@ -83,7 +84,7 @@ async def turnRight(timeToDrive):
     await asyncio.sleep(timeToDrive)
     await stop_all()
 
-async def driveAlone():
+async def searchItem(itemName):
     while True:
         oldDistance = getDistance()
         await asyncio.sleep(0.1)
@@ -97,11 +98,17 @@ async def driveAlone():
             await turnLeft(0.6)
             await driveBackward(0.5)
 
+        if(itemName in getObjectFound()):
+            await stop_all()
+            print(f"Found {itemName}")
+            return True
+        
 
 
 
 
-async def execute_command(command):
+
+async def runDriveCommand(command):
     command = command.lower().strip()
     
     if command == 'forward':
@@ -109,7 +116,7 @@ async def execute_command(command):
         
     elif command == 'backward':
         #await driveBackward()
-        await driveAlone()
+        await searchItem('banana')
 
     elif command == 'left':
         await turnLeft(0.3)
@@ -180,6 +187,6 @@ async def execute_command(command):
     elif command == 'stop':
         await stop_all()
 
-
     else:
-        print(f"Unknown command: {command}")
+        await searchItem(command)
+

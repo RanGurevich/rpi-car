@@ -1,7 +1,7 @@
 import asyncio
 import websockets
 from camera import broadcast_frames
-from carControls import execute_command
+from carControls import runDriveCommand
 
 PORT = 80
 
@@ -15,7 +15,7 @@ async def unified_handler(websocket):
             command = message.strip()
             if command:
                 print(f"Received car command: {command}")
-                await execute_command(command)
+                await runDriveCommand(command)
     except websockets.exceptions.ConnectionClosed:
         pass
     except Exception as e:
