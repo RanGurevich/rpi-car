@@ -102,6 +102,7 @@ async def searchItem(itemName):
         print(f"!!!!!!!!!!!!!!!Found objects: {itemFound}")
         if(itemName in itemFound):
             await stopCar()
+            # item found but not entering to the condition
             print(f"Foundxx {itemName}")
             await stopCar()
             break
