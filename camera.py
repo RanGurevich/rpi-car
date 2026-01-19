@@ -4,6 +4,7 @@ import base64
 from picamera2 import Picamera2
 from ultralytics import YOLO
 from ultraSonic import print_distance
+from findObjects import GetObjectFound
 
 model = YOLO('yolov8n.pt') 
 
@@ -28,12 +29,12 @@ async def broadcast_frames(connected_clients):
 
             frame = picam2.capture_array()
 
-            results = model(frame, stream=True, verbose=False, imgsz=320, conf=0.5)
+            itemsFound = model(frame, stream=True, verbose=False, imgsz=320, conf=0.5)
             
             annotated_frame = None
-            for r in results:
-                annotated_frame = r.plot()
-                objectFound = GetObjectFound(r)
+            for itemFound in itemsFound:
+                annotated_frame = itemFound.plot()
+                objectFound = GetObjectFound(itemFound)
                 print(f"Found objects: {objectFound}")
 
             if annotated_frame is None:
@@ -62,21 +63,3 @@ async def broadcast_frames(connected_clients):
     finally:
         picam2.stop()
 
-def GetObjectFound(result):
-    """
-    מקבלת תוצאה בודדת של YOLO
-    ומחזירה רשימה של שמות האובייקטים שזוהו
-    """
-    detected_names = []
-    
-    # עוברים על כל הקופסאות (הזיהויים) בתוצאה הספציפית הזו
-    for box in result.boxes:
-        # שליפת ה-ID של האובייקט (למשל 46)
-        class_id = int(box.cls[0])
-        
-        # המרה לשם האמיתי (למשל 'banana')
-        name = result.names[class_id]
-        
-        detected_names.append(name)
-        
-    return detected_names
