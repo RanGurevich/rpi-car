@@ -15,6 +15,7 @@ speedForStrafing = 0.3
 
 TURN_TIME_22_DEG = 0.5 
 FORWARD_BACKWARD_TIME = 0.2
+TIME_FOR_USER_DRIVE = 0.5
 
 def frontRightWheelBackward(speed_val):
     frontRightWheel.backward(speed_val)
@@ -46,50 +47,50 @@ async def stop_all():
     frontLeftWheel.stop()
     backRightWheel.stop()
 
-async def driveForward():
+async def driveForward(timeToDrive):
     speed = normalSpeed
     frontRightWheelForward(speed)
     frontLeftWheelForward(speed)
     backLeftWheelFoward(speed)
     backRightWheelFoward(speed)
-    await asyncio.sleep(FORWARD_BACKWARD_TIME)
+    await asyncio.sleep(timeToDrive)
     await stop_all()
 
-async def driveBackward():
+async def driveBackward(timeToDrive):
     speed = normalSpeed
     frontRightWheelBackward(speed)
     frontLeftWheelBackward(speed)
     backLeftWheelBackward(speed)
     backRightWheelBackward(speed)
-    await asyncio.sleep(FORWARD_BACKWARD_TIME)
+    await asyncio.sleep(timeToDrive)
     await stop_all()
 
-async def turnLeft():
+async def turnLeft(timeToDrive):
     speed = speedForTurning
     frontRightWheelForward(speed)
     backRightWheelFoward(speed)
     frontLeftWheelBackward(speed)
     backLeftWheelBackward(speed)
-    await asyncio.sleep(TURN_TIME_22_DEG)
+    await asyncio.sleep(timeToDrive)
     await stop_all()
 
-async def turnRight():
+async def turnRight(timeToDrive):
     speed = speedForTurning
     frontLeftWheelForward(speed)
     backLeftWheelFoward(speed)
     frontRightWheelBackward(speed)
     backRightWheelBackward(speed)
-    await asyncio.sleep(TURN_TIME_22_DEG)
+    await asyncio.sleep(timeToDrive)
     await stop_all()
 
 async def driveAlone():
     while True:
         if(getDistance() > 20):
-            await driveForward()
+            await driveForward(0.5)
         else:
-            await turnLeft()
-            await turnLeft()
-            await driveBackward()
+            await turnLeft(0.3)
+            await turnLeft(0.3)
+            await driveBackward(0.5)
 
 
 
@@ -97,17 +98,17 @@ async def execute_command(command):
     command = command.lower().strip()
     
     if command == 'forward':
-        await driveForward()
+        await driveForward(0.5)
         
     elif command == 'backward':
         #await driveBackward()
-        await driveAlone()
+        await driveAlone(0.5)
 
     elif command == 'left':
-        await turnLeft()
+        await turnLeft(0.3)
         
     elif command == 'right':
-        await turnRight()
+        await turnRight(0.3)
 
     elif command == 'z':
         print("Strafe Left")
