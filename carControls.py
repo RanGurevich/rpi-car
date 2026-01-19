@@ -92,9 +92,12 @@ async def driveAlone():
             newDistance = getDistance()
             if(int(newDistance) == int(oldDistance)):
                 await driveBackward(0.8)
+                await turnLeft(0.4)
         else:
             await turnLeft(0.6)
             await driveBackward(0.5)
+
+
 
 
 
