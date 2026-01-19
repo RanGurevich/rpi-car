@@ -99,8 +99,9 @@ async def searchItem(itemName):
             await driveBackward(0.5)
 
         
-        updateObjectFound()
+        ()
         itemFound = getFoundObjects()
+        print(f"Found objects: {itemFound}")
         if(itemName in itemFound):
             await stopCar()
             print(f"Found {itemName}")
