@@ -14,7 +14,11 @@ normalSpeed = 0.5
 speedForTurning = 0.8
 speedForStrafing = 0.3
 
-mission_finished = False 
+TURN_TIME_22_DEG = 0.5 
+FORWARD_BACKWARD_TIME = 0.2
+TIME_FOR_USER_DRIVE = 0.5
+
+stopCar = False
 
 def frontRightWheelBackward(speed_val):
     frontRightWheel.backward(speed_val)
@@ -40,14 +44,15 @@ def backRightWheelFoward(speed_val):
 def backRightWheelBackward(speed_val):
     backRightWheel.backward(speed_val)    
 
-async def stopCarFunc():
+async def stopCar():
+    stopCar = True
     await frontRightWheel.stop()
     await backLeftWheel.stop()
     await frontLeftWheel.stop()
     await backRightWheel.stop()
 
 async def driveForward(timeToDrive):
-    if mission_finished:
+    if stopCar:
         return
     speed = normalSpeed
     frontRightWheelForward(speed)
@@ -55,10 +60,10 @@ async def driveForward(timeToDrive):
     backLeftWheelFoward(speed)
     backRightWheelFoward(speed)
     await asyncio.sleep(timeToDrive)
-    await stopCarFunc()
+    await stopCar()
 
 async def driveBackward(timeToDrive):
-    if mission_finished:
+    if stopCar:
         return
     speed = normalSpeed
     frontRightWheelBackward(speed)
@@ -66,10 +71,10 @@ async def driveBackward(timeToDrive):
     backLeftWheelBackward(speed)
     backRightWheelBackward(speed)
     await asyncio.sleep(timeToDrive)
-    await stopCarFunc()
+    await stopCar()
 
 async def turnLeft(timeToDrive):
-    if mission_finished:
+    if stopCar:
         return
     speed = speedForTurning
     frontRightWheelForward(speed)
@@ -77,10 +82,10 @@ async def turnLeft(timeToDrive):
     frontLeftWheelBackward(speed)
     backLeftWheelBackward(speed)
     await asyncio.sleep(timeToDrive)
-    await stopCarFunc()
+    await stopCar()
 
 async def turnRight(timeToDrive):
-    if mission_finished:
+    if stopCar:
         return
     speed = speedForTurning
     frontLeftWheelForward(speed)
@@ -88,21 +93,14 @@ async def turnRight(timeToDrive):
     frontRightWheelBackward(speed)
     backRightWheelBackward(speed)
     await asyncio.sleep(timeToDrive)
-    await stopCarFunc()
+    await stopCar()
 
 async def searchItem(itemName):
-    global mission_finished
-    
-    if mission_finished:
+    if stopCar:
         return
-
     while True:
-        if mission_finished:
-            break
-
         oldDistance = getDistance()
         await asyncio.sleep(0.1)
-        
         if(getDistance() > 20):
             await driveForward(0.5)
             newDistance = getDistance()
@@ -114,39 +112,42 @@ async def searchItem(itemName):
             await driveBackward(0.5)
 
         itemFound = getFoundObjects()
-        print(f"Found objects: {itemFound}")
-        
-        if itemName in itemFound:
-            print(f"Found {itemName}")
-            mission_finished = True 
-            await stopCarFunc()
+        print(f"!!!!!!!!!!!!!!!Found objects: {itemFound}")
+        print(itemName)
+        if(itemName in itemFound):
+            await stopCar()
+            # item found but not entering to the condition
+            print(f"Foundxx {itemName}")
+            await stopCar()
             return
+        
+
+
+
+
 
 async def runDriveCommand(command):
-    global mission_finished
-    
-    if mission_finished:
-        return
-
     command = command.lower().strip()
     
-    if command == 'reset_mission':
-        mission_finished = False
-        return
-
     if command == 'forward':
+        stopCar = False
         await driveForward(0.5)
         
     elif command == 'backward':
+        #await driveBackward()
+        stopCar = False
         await searchItem('banana')
 
     elif command == 'left':
+        stopCar = False
         await turnLeft(0.3)
         
     elif command == 'right':
+        stopCar = False
         await turnRight(0.3)
 
     elif command == 'z':
+        stopCar = False
         print("Strafe Left")
         speed = speedForStrafing
         frontLeftWheelBackward(speed)
@@ -154,9 +155,10 @@ async def runDriveCommand(command):
         backLeftWheelFoward(speed)
         backRightWheelBackward(speed)
         await asyncio.sleep(1.0)
-        await stopCarFunc()
+        await stopCar()
 
     elif command == 'c':
+        stopCar = False
         print("Strafe Right")
         speed = speedForStrafing
         frontLeftWheelForward(speed)
@@ -164,9 +166,10 @@ async def runDriveCommand(command):
         backLeftWheelBackward(speed)
         backRightWheelFoward(speed)
         await asyncio.sleep(1.0)
-        await stopCarFunc()
+        await stopCar()
 
     elif command == 'u':
+        stopCar = False
         print("Diagonal: Forward-Left")
         speed = normalSpeed
         frontRightWheelForward(speed)
@@ -174,9 +177,10 @@ async def runDriveCommand(command):
         frontLeftWheel.stop()
         backRightWheel.stop()
         await asyncio.sleep(1.0)
-        await stopCarFunc()
+        await stopCar()
 
     elif command == 'i':
+        stopCar = False
         print("Diagonal: Forward-Right")
         speed = normalSpeed
         frontLeftWheelForward(speed)
@@ -184,9 +188,10 @@ async def runDriveCommand(command):
         frontRightWheel.stop()
         backLeftWheel.stop()
         await asyncio.sleep(1.0)
-        await stopCarFunc()
+        await stopCar()
 
     elif command == 'j':    
+        stopCar = False
         print("Diagonal: Backward-Left")
         speed = normalSpeed
         frontLeftWheelBackward(speed)
@@ -194,9 +199,10 @@ async def runDriveCommand(command):
         frontRightWheel.stop()
         backLeftWheel.stop()
         await asyncio.sleep(1.0)
-        await stopCarFunc()
+        await stopCar()
 
     elif command == 'k':    
+        stopCar = False
         print("Diagonal: Backward-Right")
         speed = normalSpeed
         frontRightWheelBackward(speed)
@@ -204,10 +210,12 @@ async def runDriveCommand(command):
         frontLeftWheel.stop()
         backRightWheel.stop()
         await asyncio.sleep(1.0)
-        await stopCarFunc()
+        await stopCar()
 
     elif command == 'stop':
-        await stopCarFunc()
+        await stopCar()
 
     else:
+        stopCar = False
         await searchItem(command)
+
