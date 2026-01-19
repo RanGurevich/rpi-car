@@ -2,7 +2,7 @@ from gpiozero import Motor
 from time import sleep
 from ultraSonic import getDistance
 import asyncio
-from findObjects import getFoundObjects
+from findObjects import getFoundObjects, updateObjectFound
 
 frontRightWheel = Motor(forward=27, backward=17)
 backLeftWheel = Motor(forward=6, backward=5)
@@ -98,12 +98,14 @@ async def searchItem(itemName):
             await turnLeft(0.6)
             await driveBackward(0.5)
 
+        
+        updateObjectFound()
         itemFound = getFoundObjects()
         if(itemName in itemFound):
             await stopCar()
             print(f"Found {itemName}")
             await stopCar()
-            return True
+            break
         
 
 
