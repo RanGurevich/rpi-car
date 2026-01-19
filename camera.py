@@ -4,7 +4,7 @@ import base64
 from picamera2 import Picamera2
 from ultralytics import YOLO
 from ultraSonic import print_distance
-from findObjects import getObjectFound
+from findObjects import getObjectFound, updateObjectFound
 
 model = YOLO('yolov8n.pt') 
 
@@ -35,6 +35,7 @@ async def broadcast_frames(connected_clients):
             for itemFound in itemsFound:
                 annotated_frame = itemFound.plot()
                 objectFound = getObjectFound(itemFound)
+                updateObjectFound(itemFound)
                 print(f"Found objects: {objectFound}")
 
             if annotated_frame is None:

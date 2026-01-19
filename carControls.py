@@ -2,7 +2,7 @@ from gpiozero import Motor
 from time import sleep
 from ultraSonic import getDistance
 import asyncio
-from findObjects import getObjectFound
+from findObjects import getFoundObjects
 
 frontRightWheel = Motor(forward=27, backward=17)
 backLeftWheel = Motor(forward=6, backward=5)
@@ -42,7 +42,7 @@ def backRightWheelFoward(speed_val):
 def backRightWheelBackward(speed_val):
     backRightWheel.backward(speed_val)    
 
-async def stop_all():
+async def stopCar():
     frontRightWheel.stop()
     backLeftWheel.stop()
     frontLeftWheel.stop()
@@ -55,7 +55,7 @@ async def driveForward(timeToDrive):
     backLeftWheelFoward(speed)
     backRightWheelFoward(speed)
     await asyncio.sleep(timeToDrive)
-    await stop_all()
+    await stopCar()
 
 async def driveBackward(timeToDrive):
     speed = normalSpeed
@@ -64,7 +64,7 @@ async def driveBackward(timeToDrive):
     backLeftWheelBackward(speed)
     backRightWheelBackward(speed)
     await asyncio.sleep(timeToDrive)
-    await stop_all()
+    await stopCar()
 
 async def turnLeft(timeToDrive):
     speed = speedForTurning
@@ -73,7 +73,7 @@ async def turnLeft(timeToDrive):
     frontLeftWheelBackward(speed)
     backLeftWheelBackward(speed)
     await asyncio.sleep(timeToDrive)
-    await stop_all()
+    await stopCar()
 
 async def turnRight(timeToDrive):
     speed = speedForTurning
@@ -82,7 +82,7 @@ async def turnRight(timeToDrive):
     frontRightWheelBackward(speed)
     backRightWheelBackward(speed)
     await asyncio.sleep(timeToDrive)
-    await stop_all()
+    await stopCar()
 
 async def searchItem(itemName):
     while True:
@@ -98,8 +98,9 @@ async def searchItem(itemName):
             await turnLeft(0.6)
             await driveBackward(0.5)
 
-        if(itemName in getObjectFound()):
-            await stop_all()
+        itemFound = getFoundObjects()
+        if(itemName in itemFound):
+            await stopCar()
             print(f"Found {itemName}")
             return True
         
@@ -132,7 +133,7 @@ async def runDriveCommand(command):
         backLeftWheelFoward(speed)
         backRightWheelBackward(speed)
         await asyncio.sleep(1.0)
-        await stop_all()
+        await stopCar()
 
     elif command == 'c':
         print("Strafe Right")
@@ -142,7 +143,7 @@ async def runDriveCommand(command):
         backLeftWheelBackward(speed)
         backRightWheelFoward(speed)
         await asyncio.sleep(1.0)
-        await stop_all()
+        await stopCar()
 
     elif command == 'u':
         print("Diagonal: Forward-Left")
@@ -152,7 +153,7 @@ async def runDriveCommand(command):
         frontLeftWheel.stop()
         backRightWheel.stop()
         await asyncio.sleep(1.0)
-        await stop_all()
+        await stopCar()
 
     elif command == 'i':
         print("Diagonal: Forward-Right")
@@ -162,7 +163,7 @@ async def runDriveCommand(command):
         frontRightWheel.stop()
         backLeftWheel.stop()
         await asyncio.sleep(1.0)
-        await stop_all()
+        await stopCar()
 
     elif command == 'j':
         print("Diagonal: Backward-Left")
@@ -172,7 +173,7 @@ async def runDriveCommand(command):
         frontRightWheel.stop()
         backLeftWheel.stop()
         await asyncio.sleep(1.0)
-        await stop_all()
+        await stopCar()
 
     elif command == 'k':
         print("Diagonal: Backward-Right")
@@ -182,10 +183,10 @@ async def runDriveCommand(command):
         frontLeftWheel.stop()
         backRightWheel.stop()
         await asyncio.sleep(1.0)
-        await stop_all()
+        await stopCar()
 
     elif command == 'stop':
-        await stop_all()
+        await stopCar()
 
     else:
         await searchItem(command)
