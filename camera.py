@@ -33,6 +33,8 @@ async def broadcast_frames(connected_clients):
             annotated_frame = None
             for r in results:
                 annotated_frame = r.plot()
+                objectFound = GetObjectFound(r)
+                print(f"Found objects: {objectFound}")
 
             if annotated_frame is None:
                 annotated_frame = frame
@@ -59,3 +61,22 @@ async def broadcast_frames(connected_clients):
         print(f"Error in broadcast: {e}")
     finally:
         picam2.stop()
+
+def GetObjectFound(result):
+    """
+    מקבלת תוצאה בודדת של YOLO
+    ומחזירה רשימה של שמות האובייקטים שזוהו
+    """
+    detected_names = []
+    
+    # עוברים על כל הקופסאות (הזיהויים) בתוצאה הספציפית הזו
+    for box in result.boxes:
+        # שליפת ה-ID של האובייקט (למשל 46)
+        class_id = int(box.cls[0])
+        
+        # המרה לשם האמיתי (למשל 'banana')
+        name = result.names[class_id]
+        
+        detected_names.append(name)
+        
+    return detected_names
