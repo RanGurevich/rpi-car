@@ -102,6 +102,7 @@ async def searchItem(itemName):
         if(itemName in itemFound):
             await stopCar()
             print(f"Found {itemName}")
+            await stopCar()
             return True
         
 
