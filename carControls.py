@@ -18,7 +18,7 @@ TURN_TIME_22_DEG = 0.5
 FORWARD_BACKWARD_TIME = 0.2
 TIME_FOR_USER_DRIVE = 0.5
 
-stopCar = False
+shouldStopCar = False
 
 def frontRightWheelBackward(speed_val):
     frontRightWheel.backward(speed_val)
@@ -45,14 +45,16 @@ def backRightWheelBackward(speed_val):
     backRightWheel.backward(speed_val)    
 
 async def stopCar():
-    stopCar = True
+    global shouldStopCar
+    shouldStopCar = True
     await frontRightWheel.stop()
     await backLeftWheel.stop()
     await frontLeftWheel.stop()
     await backRightWheel.stop()
 
 async def driveForward(timeToDrive):
-    if stopCar:
+    global shouldStopCar
+    if shouldStopCar:
         return
     speed = normalSpeed
     frontRightWheelForward(speed)
@@ -63,7 +65,8 @@ async def driveForward(timeToDrive):
     await stopCar()
 
 async def driveBackward(timeToDrive):
-    if stopCar:
+    global shouldStopCar
+    if shouldStopCar:
         return
     speed = normalSpeed
     frontRightWheelBackward(speed)
@@ -74,7 +77,8 @@ async def driveBackward(timeToDrive):
     await stopCar()
 
 async def turnLeft(timeToDrive):
-    if stopCar:
+    global shouldStopCar
+    if shouldStopCar:
         return
     speed = speedForTurning
     frontRightWheelForward(speed)
@@ -85,7 +89,8 @@ async def turnLeft(timeToDrive):
     await stopCar()
 
 async def turnRight(timeToDrive):
-    if stopCar:
+    global shouldStopCar
+    if shouldStopCar:
         return
     speed = speedForTurning
     frontLeftWheelForward(speed)
@@ -96,9 +101,12 @@ async def turnRight(timeToDrive):
     await stopCar()
 
 async def searchItem(itemName):
-    if stopCar:
+    global shouldStopCar
+    if shouldStopCar:
         return
     while True:
+        if shouldStopCar:
+            return
         oldDistance = getDistance()
         await asyncio.sleep(0.1)
         if(getDistance() > 20):
@@ -127,27 +135,28 @@ async def searchItem(itemName):
 
 
 async def runDriveCommand(command):
+    global shouldStopCar
     command = command.lower().strip()
     
     if command == 'forward':
-        stopCar = False
+        shouldStopCar = False
         await driveForward(0.5)
         
     elif command == 'backward':
         #await driveBackward()
-        stopCar = False
+        shouldStopCar = False
         await searchItem('banana')
 
     elif command == 'left':
-        stopCar = False
+        shouldStopCar = False
         await turnLeft(0.3)
         
     elif command == 'right':
-        stopCar = False
+        shouldStopCar = False
         await turnRight(0.3)
 
     elif command == 'z':
-        stopCar = False
+        shouldStopCar = False
         print("Strafe Left")
         speed = speedForStrafing
         frontLeftWheelBackward(speed)
@@ -158,7 +167,7 @@ async def runDriveCommand(command):
         await stopCar()
 
     elif command == 'c':
-        stopCar = False
+        shouldStopCar = False
         print("Strafe Right")
         speed = speedForStrafing
         frontLeftWheelForward(speed)
@@ -169,7 +178,7 @@ async def runDriveCommand(command):
         await stopCar()
 
     elif command == 'u':
-        stopCar = False
+        shouldStopCar = False
         print("Diagonal: Forward-Left")
         speed = normalSpeed
         frontRightWheelForward(speed)
@@ -180,7 +189,7 @@ async def runDriveCommand(command):
         await stopCar()
 
     elif command == 'i':
-        stopCar = False
+        shouldStopCar = False
         print("Diagonal: Forward-Right")
         speed = normalSpeed
         frontLeftWheelForward(speed)
@@ -191,7 +200,7 @@ async def runDriveCommand(command):
         await stopCar()
 
     elif command == 'j':    
-        stopCar = False
+        shouldStopCar = False
         print("Diagonal: Backward-Left")
         speed = normalSpeed
         frontLeftWheelBackward(speed)
@@ -202,7 +211,7 @@ async def runDriveCommand(command):
         await stopCar()
 
     elif command == 'k':    
-        stopCar = False
+        shouldStopCar = False
         print("Diagonal: Backward-Right")
         speed = normalSpeed
         frontRightWheelBackward(speed)
@@ -216,6 +225,6 @@ async def runDriveCommand(command):
         await stopCar()
 
     else:
-        stopCar = False
+        shouldStopCar = False
         await searchItem(command)
 
