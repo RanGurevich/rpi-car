@@ -3,6 +3,7 @@ from time import sleep
 from ultraSonic import getDistance
 import asyncio
 from findObjects import getFoundObjects, updateObjectFound
+from leds import turnOnGreenLed, turnOnRedLed, turnOffGreenLed, turnOffRedLed, turnOffAllLeds
 
 frontRightWheel = Motor(forward=27, backward=17)
 backLeftWheel = Motor(forward=6, backward=5)
@@ -13,6 +14,8 @@ MIN_MOMENTOM_FOR_SPEED = 0.5
 normalSpeed = 0.5
 speedForTurning = 0.8
 speedForStrafing = 0.3
+
+
 
 TURN_TIME_22_DEG = 0.5 
 FORWARD_BACKWARD_TIME = 0.2
@@ -120,7 +123,9 @@ async def runDriveCommand(command):
         
     elif command == 'backward':
         #await driveBackward()
-        await searchItem('banana')
+        #await searchItem('banana')
+        turnOnRedLed()
+        turnOnGreenLed()
 
     elif command == 'left':
         await turnLeft(0.3)
