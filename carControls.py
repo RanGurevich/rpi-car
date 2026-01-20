@@ -139,7 +139,7 @@ async def runDriveCommand(command):
         return
 
 
-    elif command == 'ForwardLeft':
+    elif command == 'forwardleft':
         print("Diagonal: Forward-Left")
         speed = normalSpeed
         frontRightWheelForward(speed)
@@ -150,7 +150,7 @@ async def runDriveCommand(command):
         await stopCar()
         return
 
-    elif command == 'ForwardRight':
+    elif command == 'forwardright':
         print("Diagonal: Forward-Right")
         speed = normalSpeed
         frontLeftWheelForward(speed)
@@ -161,7 +161,7 @@ async def runDriveCommand(command):
         await stopCar()
         return
 
-    elif command == 'BackwardLeft':
+    elif command == 'backwardleft':
         print("Diagonal: Backward-Left")
         speed = normalSpeed
         frontLeftWheelBackward(speed)
@@ -172,7 +172,7 @@ async def runDriveCommand(command):
         await stopCar()
         return
 
-    elif command == 'BackwardRight':
+    elif command == 'backwardright':
         print("Diagonal: Backward-Right")
         speed = normalSpeed
         frontRightWheelBackward(speed)
