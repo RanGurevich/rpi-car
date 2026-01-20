@@ -111,7 +111,7 @@ async def searchItem(itemName):
             await stopCar()
             # item found but not entering to the condition
             print(f"Foundxx {itemName}")
-            await asyncio.sleep(60)
+            await asyncio.sleep(15)
             turnOffAllLeds()
             await stopCar()
             break

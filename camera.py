@@ -30,17 +30,14 @@ async def broadcast_frames(connected_clients):
             frame = picam2.capture_array()
 
             itemsFound = model(frame, stream=True, verbose=False, imgsz=320, conf=0.5)
+            print(model.names) 
             
             annotated_frame = None
-            has_results = False
             for itemFound in itemsFound:
                 annotated_frame = itemFound.plot()
                 objectFound = getObjectFound(itemFound)
                 updateObjectFound(itemFound)
-                has_results = True
-
-            if not has_results:
-                updateObjectFound(None)
+              
 
             if annotated_frame is None:
                 annotated_frame = frame
