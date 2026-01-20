@@ -123,11 +123,11 @@ async def runDriveCommand(command):
     command = command.lower().strip()
         
     if command == 'forward':
-        await driveForward(0.5)
+        await driveForward(0.7)
         return
         
     elif command == 'backward':
-        await driveBackward(0.5)
+        await driveBackward(0.7)
         return
 
     elif command == 'left':
@@ -138,29 +138,8 @@ async def runDriveCommand(command):
         await turnRight(0.3)
         return
 
-    elif command == 'z':
-        print("Strafe Left")
-        speed = speedForStrafing
-        frontLeftWheelBackward(speed)
-        frontRightWheelForward(speed)
-        backLeftWheelFoward(speed)
-        backRightWheelBackward(speed)
-        await asyncio.sleep(1.0)
-        await stopCar()
-        return
 
-    elif command == 'c':
-        print("Strafe Right")
-        speed = speedForStrafing
-        frontLeftWheelForward(speed)
-        frontRightWheelBackward(speed)
-        backLeftWheelBackward(speed)
-        backRightWheelFoward(speed)
-        await asyncio.sleep(1.0)
-        await stopCar()
-        return
-
-    elif command == 'u':
+    elif command == 'ForwardLeft':
         print("Diagonal: Forward-Left")
         speed = normalSpeed
         frontRightWheelForward(speed)
@@ -171,7 +150,7 @@ async def runDriveCommand(command):
         await stopCar()
         return
 
-    elif command == 'i':
+    elif command == 'ForwardRight':
         print("Diagonal: Forward-Right")
         speed = normalSpeed
         frontLeftWheelForward(speed)
@@ -182,7 +161,7 @@ async def runDriveCommand(command):
         await stopCar()
         return
 
-    elif command == 'j':
+    elif command == 'BackwardLeft':
         print("Diagonal: Backward-Left")
         speed = normalSpeed
         frontLeftWheelBackward(speed)
@@ -193,7 +172,7 @@ async def runDriveCommand(command):
         await stopCar()
         return
 
-    elif command == 'k':
+    elif command == 'BackwardRight':
         print("Diagonal: Backward-Right")
         speed = normalSpeed
         frontRightWheelBackward(speed)
