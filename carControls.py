@@ -104,7 +104,6 @@ async def searchItem(itemName):
             await driveBackward(0.5)
 
         itemFound = getFoundObjects()
-        print(f"!!!!!!!!!!!!!!!Found objects: {itemFound}")
         if(itemName in itemFound):
             turnOffRedLed()
             turnOnGreenLed()
@@ -118,13 +117,11 @@ async def searchItem(itemName):
         
 
 async def runDriveCommand(command):
-    # ניקוי מקיף של הפקודה - הסרת כל תווים לא-מודפסים
-    original_command = command
+    commandFromUser = command
+    # cleaning the command from unwanted chars
     command = ''.join(char for char in command if char.isprintable())
     command = command.lower().strip()
-    
-    print(f"DEBUG: Original command: {repr(original_command)}, Cleaned: '{command}' (len={len(command)})")
-    
+        
     if command == 'forward':
         await driveForward(0.5)
         return
@@ -132,9 +129,6 @@ async def runDriveCommand(command):
     elif command == 'backward':
         await driveBackward(0.5)
         return
-        #await searchItem('banana')
-        #turnOnRedLed()
-        #turnOnGreenLed()
 
     elif command == 'left':
         await turnLeft(0.3)

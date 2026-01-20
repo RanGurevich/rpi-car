@@ -8,50 +8,49 @@ from findObjects import getObjectFound, updateObjectFound
 
 model = YOLO('yolov8n.pt') 
 
-picam2 = Picamera2()
-config = picam2.create_preview_configuration(main={"size": (1292, 972), "format": "RGB888"})
-picam2.configure(config)
-picam2.start()
+camera = Picamera2()
+cameraConfig = camera.create_preview_configuration(main={"size": (1292, 972), "format": "RGB888"})
+camera.configure(cameraConfig)
+camera.start()
 
 
-async def broadcast_frames(connected_clients):
-    print("Starting broadcast loop...")
+async def startVideoBroadcast(clientConnected):
+    print("Starting video broadscast")
     try:
         import time
-        last_time = time.time()
+        timeDelay = time.time()
         
         while True:
-            now = time.time()
-            if now - last_time < 0.05:
+            currentTime = time.time()
+            if currentTime - timeDelay < 0.05:
                 await asyncio.sleep(0.01)
                 continue
-            last_time = now
+            timeDelay = currentTime
 
-            frame = picam2.capture_array()
+            frame = camera.capture_array()
 
             itemsFound = model(frame, stream=True, verbose=False, imgsz=320, conf=0.5)            
             annotated_frame = None
             for itemFound in itemsFound:
                 annotated_frame = itemFound.plot()
-                objectFound = getObjectFound(itemFound)
                 updateObjectFound(itemFound)
               
 
             if annotated_frame is None:
                 annotated_frame = frame
 
-            small_frame = cv2.resize(annotated_frame, (320, 240))
+            smallFrame = cv2.resize(annotated_frame, (320, 240))
             
-            display_frame = cv2.cvtColor(small_frame, cv2.COLOR_RGB2BGR)
+            FrameToBroadcast = cv2.cvtColor(smallFrame, cv2.COLOR_RGB2BGR)
 
-            if connected_clients:
+            if clientConnected:
                 encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 40]
-                _, buffer = cv2.imencode('.jpg', display_frame, encode_param)
+                _, buffer = cv2.imencode('.jpg', FrameToBroadcast, encode_param)
                 jpg_as_text = base64.b64encode(buffer).decode('utf-8')
                 
-                tasks = [client.send(jpg_as_text) for client in connected_clients]
+                tasks = [client.send(jpg_as_text) for client in clientConnected]
                 await asyncio.gather(*tasks, return_exceptions=True)
-
+            # update the car distance in real time
             distance = print_distance()
             if distance < 10:
                 print("Too close")
@@ -61,5 +60,5 @@ async def broadcast_frames(connected_clients):
     except Exception as e:
         print(f"Error in broadcast: {e}")
     finally:
-        picam2.stop()
+        camera.stop()
 

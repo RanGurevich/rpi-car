@@ -1,6 +1,6 @@
 import asyncio
 import websockets
-from camera import broadcast_frames
+from camera import startVideoBroadcast
 from carControls import runDriveCommand
 
 PORT = 80
@@ -30,7 +30,7 @@ async def main():
     async with websockets.serve(unified_handler, "0.0.0.0", PORT):
         print(f"WebSocket Server started on port {PORT}")
         print("Clients can receive camera feed and send car control commands")
-        await broadcast_frames(all_clients)
+        await startVideoBroadcast(all_clients)
 
 if __name__ == "__main__":
     try:

@@ -4,13 +4,14 @@ def updateObjectFound(items):
     global objectFound
     itemsNameFound = []
     
+    # check if the items is None or if it has no boxes
     if items is None or not hasattr(items, 'boxes') or len(items.boxes) == 0:
         objectFound = []
         return
    
     for box in items.boxes:
-        class_id = int(box.cls[0])  
-        name = items.names[class_id]      
+        itemId = int(box.cls[0])  
+        name = items.names[itemId]      
         itemsNameFound.append(name)
     
     objectFound = itemsNameFound
