@@ -2,7 +2,7 @@ from gpiozero import Motor
 from time import sleep
 from ultraSonic import getDistance
 import asyncio
-from findObjects import getFoundObjects, updateObjectFound
+from findObjects import getFoundObjects, updateObjectFound, getItemCanBeFind
 from leds import turnOnGreenLed, turnOnRedLed, turnOffGreenLed, turnOffRedLed, turnOffAllLeds
 
 frontRightWheel = Motor(forward=27, backward=17)
@@ -214,6 +214,6 @@ async def runDriveCommand(command):
         await stopCar()
         return
 
-    else:
+    elif command in getItemCanBeFind():
         await searchItem(command)
 
