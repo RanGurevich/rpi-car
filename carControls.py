@@ -118,7 +118,12 @@ async def searchItem(itemName):
         
 
 async def runDriveCommand(command):
+    # ניקוי מקיף של הפקודה - הסרת כל תווים לא-מודפסים
+    original_command = command
+    command = ''.join(char for char in command if char.isprintable())
     command = command.lower().strip()
+    
+    print(f"DEBUG: Original command: {repr(original_command)}, Cleaned: '{command}' (len={len(command)})")
     
     if command == 'forward':
         await driveForward(0.5)
@@ -210,5 +215,6 @@ async def runDriveCommand(command):
         return
 
     else:
+        print(f"DEBUG: Command '{command}' not matched, executing searchItem")
         await searchItem(command)
 
