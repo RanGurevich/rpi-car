@@ -122,18 +122,22 @@ async def runDriveCommand(command):
     
     if command == 'forward':
         await driveForward(0.5)
+        return
         
     elif command == 'backward':
-        await driveBackward()
+        await driveBackward(0.5)
+        return
         #await searchItem('banana')
         #turnOnRedLed()
         #turnOnGreenLed()
 
     elif command == 'left':
         await turnLeft(0.3)
+        return
         
     elif command == 'right':
         await turnRight(0.3)
+        return
 
     elif command == 'z':
         print("Strafe Left")
@@ -144,6 +148,7 @@ async def runDriveCommand(command):
         backRightWheelBackward(speed)
         await asyncio.sleep(1.0)
         await stopCar()
+        return
 
     elif command == 'c':
         print("Strafe Right")
@@ -154,6 +159,7 @@ async def runDriveCommand(command):
         backRightWheelFoward(speed)
         await asyncio.sleep(1.0)
         await stopCar()
+        return
 
     elif command == 'u':
         print("Diagonal: Forward-Left")
@@ -164,6 +170,7 @@ async def runDriveCommand(command):
         backRightWheel.stop()
         await asyncio.sleep(1.0)
         await stopCar()
+        return
 
     elif command == 'i':
         print("Diagonal: Forward-Right")
@@ -174,6 +181,7 @@ async def runDriveCommand(command):
         backLeftWheel.stop()
         await asyncio.sleep(1.0)
         await stopCar()
+        return
 
     elif command == 'j':
         print("Diagonal: Backward-Left")
@@ -184,6 +192,7 @@ async def runDriveCommand(command):
         backLeftWheel.stop()
         await asyncio.sleep(1.0)
         await stopCar()
+        return
 
     elif command == 'k':
         print("Diagonal: Backward-Right")
@@ -194,9 +203,11 @@ async def runDriveCommand(command):
         backRightWheel.stop()
         await asyncio.sleep(1.0)
         await stopCar()
+        return
 
     elif command == 'stop':
         await stopCar()
+        return
 
     else:
         await searchItem(command)
