@@ -110,16 +110,12 @@ async def searchItem(itemName):
             turnOnGreenLed()
             await stopCar()
             # item found but not entering to the condition
-            print(f"Foundxx {itemName}")
+            print(f"Found {itemName} and stopping car")
             await asyncio.sleep(15)
             turnOffAllLeds()
             await stopCar()
             break
         
-
-
-
-
 
 async def runDriveCommand(command):
     command = command.lower().strip()
@@ -128,8 +124,8 @@ async def runDriveCommand(command):
         await driveForward(0.5)
         
     elif command == 'backward':
-        #await driveBackward()
-        await searchItem('banana')
+        await driveBackward()
+        #await searchItem('banana')
         #turnOnRedLed()
         #turnOnGreenLed()
 
@@ -203,6 +199,5 @@ async def runDriveCommand(command):
         await stopCar()
 
     else:
-        print(command)
-        #await searchItem(command)
+        await searchItem(command)
 
