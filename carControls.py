@@ -216,5 +216,5 @@ async def runDriveCommand(command):
 
     else:
         print(f"DEBUG: Command '{command}' not matched, executing searchItem")
-        await searchItem(command)
+       # await searchItem(command)
 
